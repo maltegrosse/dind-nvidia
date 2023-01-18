@@ -74,7 +74,8 @@ EXPOSE 2375
 
 
 RUN apt-get install -y uidmap iproute2 fuse-overlayfs docker-ce-rootless-extras
-RUN mkdir /run/user && chmod 1777 /run/user
+RUN mkdir /run/user 
+RUN chmod 1777 /run/user
 RUN adduser rootless --home /home/rootless --gecos 'Rootless' --disabled-password --uid 1000 
 RUN echo 'rootless:100000:65536' >> /etc/subuid
 RUN echo 'rootless:100000:65536' >> /etc/subgid
