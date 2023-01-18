@@ -72,6 +72,16 @@ RUN ln -s /usr/local/bin/dockerd-entrypoint.sh /
 VOLUME /var/lib/docker
 EXPOSE 2375
 
+
+RUN apt-get install -y uidmap iproute2 fuse-overlayfs docker-ce-rootless-extras
+RUN mkdir /run/user && chmod 1777 /run/user
+RUN adduser rootless --home /home/rootless --gecos 'Rootless' --disabled-password --uid 1000 
+RUN echo 'rootless:100000:65536' >> /etc/subuid
+RUN echo 'rootless:100000:65536' >> /etc/subgid
+RUN mkdir -p /home/rootless/.local/share/docker; 
+RUN chown -R rootless:rootless /home/rootless/.local/share/docker
+VOLUME /home/rootless/.local/share/docker
+USER rootless
 ENTRYPOINT ["dockerd-entrypoint.sh"]
 #ENTRYPOINT ["/bin/sh", "/shared/dockerd-entrypoint.sh"]
 CMD []
