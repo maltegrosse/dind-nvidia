@@ -64,7 +64,7 @@ RUN sed -i '2i \ \ \ \ "default-runtime": "nvidia",' /etc/docker/daemon.json
 
 RUN mkdir -p /usr/local/bin/
 
-RUN wget https://raw.githubusercontent.com/docker-library/docker/0997ca7ad1d7892324d84951d55192d5ef629bcc/dockerd-entrypoint.sh -P /usr/local/bin/dockerd-entrypoint.sh
+RUN wget https://raw.githubusercontent.com/docker-library/docker/0997ca7ad1d7892324d84951d55192d5ef629bcc/dockerd-entrypoint.sh -P /usr/local/bin/
 #COPY dockerd-entrypoint.sh /usr/local/bin/
 RUN chmod 777 /usr/local/bin/dockerd-entrypoint.sh
 RUN ln -s /usr/local/bin/dockerd-entrypoint.sh /
