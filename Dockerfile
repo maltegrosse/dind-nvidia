@@ -1,4 +1,5 @@
-ARG CUDA_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu20.04
+ARG CUDA_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu20.04 
+
 FROM ${CUDA_IMAGE}
 
 # from https://stackoverflow.com/questions/71852720/docker19-03-dind-could-not-select-device-driver-nvidia-with-capabilities
@@ -15,7 +16,14 @@ RUN apt-get update -q && \
        "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
        $(lsb_release -cs) \
        stable"  && \
-    apt-get update -q && apt-get install -yq docker-ce docker-ce-cli containerd.io
+    apt-get update -q 
+RUN apt-cache madison docker-ce
+
+ARG DOCKER_CE=5:20.10.22~3-0~ubuntu-focal 
+ARG CONTAINER_D=1.6.15-1
+RUN apt-get install -yq docker-ce=${DOCKER_CE} docker-ce-cli=${DOCKER_CE} containerd.io=${CONTAINER_D}
+
+
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
 RUN set -eux; \
@@ -73,21 +81,6 @@ VOLUME /var/lib/docker
 EXPOSE 2375
 
 
-RUN apt-get install -y uidmap iproute2 fuse-overlayfs docker-ce-rootless-extras kmod
-RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-rootless-extras-20.10.22.tgz -O rootless.tgz
-RUN tar zxvf rootless.tgz
-RUN mv docker-rootless-extras/* /usr/local/bin/
-RUN rm -r docker-rootless-extras 
-RUN rm rootless.tgz
-#RUN mkdir /run/user 
-RUN chmod 1777 /run/user
-RUN adduser rootless --home /home/rootless --gecos 'Rootless' --disabled-password --uid 1000 
-RUN echo 'rootless:100000:65536' >> /etc/subuid
-RUN echo 'rootless:100000:65536' >> /etc/subgid
-RUN mkdir -p /home/rootless/.local/share/docker; 
-RUN chown -R rootless:rootless /home/rootless/.local/share/docker
-VOLUME /home/rootless/.local/share/docker
-USER rootless
 ENTRYPOINT ["dockerd-entrypoint.sh"]
-#ENTRYPOINT ["/bin/sh", "/shared/dockerd-entrypoint.sh"]
+
 CMD []
