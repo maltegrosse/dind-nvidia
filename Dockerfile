@@ -79,7 +79,10 @@ RUN ln -s /usr/local/bin/dockerd-entrypoint.sh /
 VOLUME /var/lib/docker
 EXPOSE 2375
 
+COPY /entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod 777 /usr/local/bin/entrypoint.sh
+RUN ln -s /usr/local/bin/entrypoint.sh /
 
-ENTRYPOINT ["dockerd-entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 
 CMD []
