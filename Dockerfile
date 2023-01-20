@@ -17,12 +17,11 @@ RUN apt-get update -q && \
        $(lsb_release -cs) \
        stable"  && \
     apt-get update -q 
-RUN apt-cache madison docker-ce
-
-ARG DOCKER_CE=5:20.10.22~3-0~ubuntu-focal 
+#RUN apt-cache madison containerd.io
+ARG DOCKER_CE=5:20.10.23~3-0~ubuntu-jammy
 ARG CONTAINER_D=1.6.15-1
 RUN apt-get install -yq docker-ce=${DOCKER_CE} docker-ce-cli=${DOCKER_CE} containerd.io=${CONTAINER_D}
-
+RUN apt-get update -q && apt-get upgrade -y
 
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
