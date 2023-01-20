@@ -1,4 +1,4 @@
-ARG CUDA_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu20.04 
+ARG CUDA_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu22.04 
 
 FROM ${CUDA_IMAGE}
 
